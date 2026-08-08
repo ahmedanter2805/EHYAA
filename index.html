@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ehyāa Cloud | منصة إدارة الموزع الذكي للدواء</title>
+    <title>Ehyāa Cloud | تطبيق موزع الدواء الذكي</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -54,18 +54,17 @@
     <style>
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #060911;
+            background-color: #050810;
             color: #f3f4f6;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .glass-saas-card {
-            background: rgba(13, 19, 32, 0.88);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: all 0.25s ease;
+        .glass-card-mobile {
+            background: rgba(14, 20, 34, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
         }
 
         .sidebar-link.active {
@@ -103,18 +102,18 @@
             100% { border-color: rgba(225, 29, 72, 1); box-shadow: 0 0 30px rgba(225, 29, 72, 0.7); }
         }
 
-        /* Mobile specific bottom safe padding */
+        /* Safe padding for bottom navigation bar */
         .pb-safe-bottom {
-            padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+            padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: #060911; }
+        ::-webkit-scrollbar { width: 3px; height: 3px; }
+        ::-webkit-scrollbar-track { background: #050810; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
     </style>
 </head>
-<body class="h-full bg-[#060911] text-slate-100 flex flex-col md:flex-row overflow-x-hidden">
+<body class="h-full bg-[#050810] text-slate-100 flex flex-col md:flex-row overflow-x-hidden">
 
     <!-- Active Alarm SaaS Toast Banner -->
     <div id="active-session-banner" class="hidden fixed top-0 inset-x-0 z-50 transition-all duration-500">
@@ -136,7 +135,7 @@
         </div>
     </div>
 
-    <!-- SIDEBAR NAVIGATION FOR DESKTOP -->
+    <!-- SIDEBAR NAVIGATION FOR DESKTOP ONLY -->
     <aside class="w-full md:w-72 bg-[#090e1a] border-b md:border-b-0 md:border-l border-slate-800/80 flex-shrink-0 sticky top-0 z-40 md:h-screen md:sticky hidden md:flex flex-col justify-between">
         <div class="p-5 space-y-6">
             
@@ -150,7 +149,7 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <h1 class="text-xl font-black tracking-tight text-white font-jakarta">Ehyāa</h1>
-                            <span class="text-xs px-2 py-0.5 rounded-md bg-brand-500/20 text-brand-300 font-mono font-bold border border-brand-500/30">v2.8 Mobile</span>
+                            <span class="text-xs px-2 py-0.5 rounded-md bg-brand-500/20 text-brand-300 font-mono font-bold border border-brand-500/30">v3.0 Ultra</span>
                         </div>
                         <p class="text-[10px] text-slate-400 font-semibold">منصة الموزع الطبي الذكي</p>
                     </div>
@@ -226,34 +225,13 @@
 
     </aside>
 
-    <!-- MOBILE NATIVE HEADER (Optimized specifically for Mobile Phones) -->
-    <header class="md:hidden sticky top-0 z-40 bg-[#090e1a]/95 border-b border-slate-800/80 px-4 py-3 backdrop-blur-md flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center p-1 glow-purple">
-                <img src="logo.png" alt="Ehyāa Logo" class="h-5 w-auto object-contain" />
-            </div>
-            <div>
-                <h1 class="text-base font-black text-white font-jakarta leading-none">Ehyāa <span class="text-brand-400 text-xs font-bold">| إحياء</span></h1>
-                <span class="text-[9px] text-slate-400 font-semibold">تطبيق إدارة الموزع الطبي</span>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-2">
-            <div class="flex items-center gap-1.5 bg-slate-900/90 px-2.5 py-1 rounded-xl border border-slate-800 text-[10px]">
-                <span id="mobile-esp-led" class="w-2 h-2 rounded-full bg-emerald-500 pulse-live-emerald"></span>
-                <span class="font-bold text-emerald-400 font-mono">ESP32 ON</span>
-            </div>
-            <div class="font-mono text-slate-300 text-[10px] bg-slate-900/90 px-2 py-1 rounded-xl border border-slate-800" id="mobile-clock">00:00:00</div>
-        </div>
-    </header>
-
     <!-- MAIN SAAS WORKSPACE CONTENT -->
-    <div class="flex-1 flex flex-col min-w-0 bg-[#060911] pb-safe-bottom">
+    <div class="flex-1 flex flex-col min-w-0 bg-[#050810] pb-safe-bottom">
         
-        <!-- Desktop Header Bar -->
+        <!-- Desktop Desktop Top Bar -->
         <header class="hidden md:flex bg-[#090e1a]/90 border-b border-slate-800/80 px-8 py-4 items-center justify-between backdrop-blur-md sticky top-0 z-30">
             <div>
-                <h2 class="text-lg font-black text-white font-jakarta">Ehyāa Realtime Firebase Control Panel</h2>
+                <h2 class="text-lg font-black text-white font-jakarta">Ehyāa Realtime Control Center</h2>
                 <p class="text-xs text-slate-400">مربوط فورياً مع Firebase Database: <span class="font-mono text-brand-300">ehyaa-35076-default-rtdb</span></p>
             </div>
             
@@ -269,221 +247,223 @@
             </div>
         </header>
 
-        <main class="p-3 md:p-8 max-w-7xl w-full mx-auto space-y-4 md:space-y-8">
+        <main class="p-3 md:p-8 max-w-7xl w-full mx-auto space-y-3 md:space-y-8">
 
-            <!-- Mobile Quick Status Bar Cards (Scrollable horizontal on small screens) -->
-            <section class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
-                
-                <div class="glass-saas-card p-3.5 md:p-5 rounded-2xl md:rounded-3xl relative overflow-hidden">
+            <!-- MOBILE NATIVE MINIMAL BRAND & STATUS HEADER BAR -->
+            <div class="md:hidden flex items-center justify-between pt-2 pb-1 px-1">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center p-1 glow-purple">
+                        <img src="logo.png" alt="Ehyāa Logo" class="h-4 w-auto object-contain" />
+                    </div>
+                    <div>
+                        <h1 class="text-sm font-black text-white font-jakarta leading-none">Ehyāa <span class="text-brand-400 text-[10px]">Cloud</span></h1>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-1.5">
+                    <div class="flex items-center gap-1 bg-slate-900/90 px-2 py-0.5 rounded-lg border border-slate-800 text-[10px]">
+                        <span id="mobile-esp-led" class="w-2 h-2 rounded-full bg-emerald-500 pulse-live-emerald"></span>
+                        <span class="font-bold text-emerald-400 font-mono">ESP32 ON</span>
+                    </div>
+                    <div class="font-mono text-slate-300 text-[10px] bg-slate-900/90 px-1.5 py-0.5 rounded-lg border border-slate-800" id="mobile-clock">00:00:00</div>
+                </div>
+            </div>
+
+            <!-- COMPACT MOBILE & DESKTOP QUICK STATS -->
+            <section class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-5">
+                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block mb-0.5">الأدراج التشغيلية</span>
-                            <h3 class="text-base md:text-2xl font-black text-white font-jakarta">5 Drawers</h3>
+                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block">الأدراج النشطة</span>
+                            <h3 class="text-sm md:text-2xl font-black text-white font-jakarta">5 Drawers</h3>
                         </div>
-                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-brand-500/10 text-brand-400 flex items-center justify-center text-sm md:text-xl">
+                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-brand-500/10 text-brand-400 flex items-center justify-center text-xs md:text-xl">
                             <i class="fa-solid fa-microchip"></i>
                         </div>
                     </div>
-                    <div class="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[9px] md:text-[11px] text-slate-400">
-                        <span class="hidden sm:inline">GPIO Pins: 23..</span>
-                        <span class="text-emerald-400 font-bold">5 Active LEDs</span>
-                    </div>
                 </div>
 
-                <div class="glass-saas-card p-3.5 md:p-5 rounded-2xl md:rounded-3xl relative overflow-hidden">
+                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block mb-0.5">التزام المريض</span>
-                            <h3 class="text-base md:text-2xl font-black text-emerald-400 font-jakarta">85%</h3>
+                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block">التزام المريض</span>
+                            <h3 class="text-sm md:text-2xl font-black text-emerald-400 font-jakarta">85%</h3>
                         </div>
-                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm md:text-xl">
+                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs md:text-xl">
                             <i class="fa-solid fa-chart-line"></i>
                         </div>
                     </div>
-                    <div class="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[9px] md:text-[11px] text-slate-400">
-                        <span>التزام ممتاز</span>
-                        <span class="text-emerald-400 font-bold">+5%</span>
-                    </div>
                 </div>
 
-                <div class="glass-saas-card p-3.5 md:p-5 rounded-2xl md:rounded-3xl relative overflow-hidden">
+                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block mb-0.5">مخاطر تفويت</span>
-                            <h3 class="text-base md:text-2xl font-black text-amber-400 font-jakarta">Low Risk</h3>
+                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block">المخاطر التنبؤية</span>
+                            <h3 class="text-sm md:text-2xl font-black text-amber-400 font-jakarta">Low Risk</h3>
                         </div>
-                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm md:text-xl">
+                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs md:text-xl">
                             <i class="fa-solid fa-shield-heart"></i>
                         </div>
                     </div>
-                    <div class="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[9px] md:text-[11px] text-slate-400">
-                        <span>الذكاء الاصطناعي</span>
-                        <span class="text-amber-400 font-bold">مستقر</span>
-                    </div>
                 </div>
 
-                <div class="glass-saas-card p-3.5 md:p-5 rounded-2xl md:rounded-3xl relative overflow-hidden">
+                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block mb-0.5">التليجرام</span>
-                            <h3 class="text-base md:text-2xl font-black text-indigo-400 font-jakarta">4 Members</h3>
+                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block">تنبيهات التليجرام</span>
+                            <h3 class="text-sm md:text-2xl font-black text-indigo-400 font-jakarta">4 Chats</h3>
                         </div>
-                        <div class="w-8 h-8 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-sm md:text-xl">
+                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xs md:text-xl">
                             <i class="fa-brands fa-telegram"></i>
                         </div>
                     </div>
-                    <div class="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[9px] md:text-[11px] text-slate-400">
-                        <span>4 Telegram IDs</span>
-                        <span class="text-indigo-400 font-bold">Active</span>
-                    </div>
                 </div>
-
             </section>
 
 
             <!-- TAB VIEW 1: 5 SMART DRAWERS CARDS -->
-            <section id="view-drawers" class="space-y-4 md:space-y-6">
+            <section id="view-drawers" class="space-y-3 md:space-y-6">
                 
-                <!-- Drawer Section Header & Drawer Filter Tabs -->
-                <div class="glass-saas-card p-3.5 md:p-5 rounded-2xl md:rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div>
-                        <h3 class="text-sm md:text-lg font-black text-white flex items-center gap-2">
+                <!-- Drawer Section Selector Header -->
+                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl md:rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs md:text-lg font-black text-white flex items-center gap-2">
                             <i class="fa-solid fa-boxes-stacked text-brand-400"></i>
-                            إدارة الأدراج والمواعيد المتعددة (5 Smart Drawers)
+                            إدارة الأدراج والمواعيد
                         </h3>
-                        <p class="text-[11px] md:text-xs text-slate-400 mt-0.5">تخصيص الأدوية، دواعي الاستعمال، الجرعة، إضافة مواعيد يومية، ورسائل التليجرام</p>
+                        <span class="md:hidden text-[10px] text-slate-400 font-bold">اختر الدرج ➔</span>
                     </div>
 
-                    <!-- Mobile & Desktop Filter Tabs -->
-                    <div class="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0 w-full md:w-auto">
-                        <button onclick="selectDrawerFilter('all')" id="drawer-flt-all" class="flex-1 md:flex-none px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-lg shadow-brand-600/30 whitespace-nowrap text-center">الكل (5)</button>
-                        <button onclick="selectDrawerFilter(1)" id="drawer-flt-1" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700 text-center">#1</button>
-                        <button onclick="selectDrawerFilter(2)" id="drawer-flt-2" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700 text-center">#2</button>
-                        <button onclick="selectDrawerFilter(3)" id="drawer-flt-3" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700 text-center">#3</button>
-                        <button onclick="selectDrawerFilter(4)" id="drawer-flt-4" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700 text-center">#4</button>
-                        <button onclick="selectDrawerFilter(5)" id="drawer-flt-5" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700 text-center">#5</button>
+                    <!-- Mobile Native Segmented Drawer Filter Tabs -->
+                    <div class="flex items-center gap-1 overflow-x-auto pb-0.5 md:pb-0 w-full md:w-auto">
+                        <button onclick="selectDrawerFilter('all')" id="drawer-flt-all" class="flex-1 md:flex-none px-3 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-brand-600 text-white shadow-md text-center">الكل (5)</button>
+                        <button onclick="selectDrawerFilter(1)" id="drawer-flt-1" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #1</button>
+                        <button onclick="selectDrawerFilter(2)" id="drawer-flt-2" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #2</button>
+                        <button onclick="selectDrawerFilter(3)" id="drawer-flt-3" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #3</button>
+                        <button onclick="selectDrawerFilter(4)" id="drawer-flt-4" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #4</button>
+                        <button onclick="selectDrawerFilter(5)" id="drawer-flt-5" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #5</button>
                     </div>
                 </div>
 
-                <!-- 5 Drawers Grid - Single Column on Mobile with Touch Optimizations -->
-                <div id="drawers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-6">
-                    <!-- Dynamic Mobile-Optimized Cards -->
+                <!-- 5 Drawers Grid -->
+                <div id="drawers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-6">
+                    <!-- Dynamic Drawer Cards -->
                 </div>
             </section>
 
 
             <!-- TAB VIEW 2: DAILY SCHEDULE TIMELINE -->
-            <section id="view-timeline" class="hidden space-y-4 md:space-y-6">
-                <div class="glass-saas-card p-4 md:p-6 rounded-2xl md:rounded-3xl space-y-4 md:space-y-6">
-                    <div class="flex items-center justify-between pb-3 md:pb-4 border-b border-slate-800">
+            <section id="view-timeline" class="hidden space-y-3 md:space-y-6">
+                <div class="glass-card-mobile p-4 md:p-6 rounded-2xl md:rounded-3xl space-y-3 md:space-y-6">
+                    <div class="flex items-center justify-between pb-2.5 md:pb-4 border-b border-slate-800">
                         <div>
-                            <h3 class="text-sm md:text-lg font-black text-white flex items-center gap-2">
+                            <h3 class="text-xs md:text-lg font-black text-white flex items-center gap-2">
                                 <i class="fa-solid fa-calendar-check text-brand-400"></i>
-                                جدول المواعيد اليومية (Daily Medication Schedule)
+                                جدول المواعيد اليومية (Daily Timeline)
                             </h3>
-                            <p class="text-[11px] md:text-xs text-slate-400 mt-0.5">عرض زمني متسلسل لجميع مواعيد الجرعات المقررة لهذا اليوم</p>
+                            <p class="text-[10px] md:text-xs text-slate-400 mt-0.5">ترتيب زمني متسلسل لجميع مواعيد جرعات اليوم المقررة</p>
                         </div>
                     </div>
 
-                    <div id="timeline-container" class="space-y-3">
-                        <!-- Mobile-Friendly Timeline List -->
+                    <div id="timeline-container" class="space-y-2.5">
+                        <!-- Mobile Timeline List -->
                     </div>
                 </div>
             </section>
 
 
             <!-- TAB VIEW 3: AI ANALYTICS & INSIGHTS -->
-            <section id="view-ai" class="hidden space-y-4 md:space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+            <section id="view-ai" class="hidden space-y-3 md:space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6">
                     
                     <!-- AI Module (2 Columns) -->
-                    <div class="lg:col-span-2 glass-saas-card p-4 md:p-6 rounded-2xl md:rounded-3xl space-y-4 md:space-y-6">
-                        <div class="flex items-center justify-between pb-3 md:pb-4 border-b border-slate-800">
-                            <div class="flex items-center space-x-3 space-x-reverse">
-                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center text-base md:text-lg">
+                    <div class="lg:col-span-2 glass-card-mobile p-4 md:p-6 rounded-2xl md:rounded-3xl space-y-4 md:space-y-6">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                            <div class="flex items-center space-x-2.5 space-x-reverse">
+                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center text-sm md:text-lg">
                                     <i class="fa-solid fa-brain"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm md:text-base font-black text-white">🤖 تحليلات الذكاء الاصطناعي (AI Insights)</h3>
-                                    <p class="text-[11px] md:text-xs text-slate-400">تحليل التزام المرضى والتوقعات التنبؤية</p>
+                                    <h3 class="text-xs md:text-base font-black text-white">🤖 تحليلات الذكاء الاصطناعي (AI Insights)</h3>
+                                    <p class="text-[10px] md:text-xs text-slate-400">تحليل التزام المرضى والتوقعات التنبؤية</p>
                                 </div>
                             </div>
-                            <span class="px-2.5 py-0.5 text-[10px] md:text-xs font-bold rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">Model v2.8</span>
+                            <span class="px-2 py-0.5 text-[9px] md:text-xs font-bold rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">v3.0 Ultra</span>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                            <div class="p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-slate-900/80 border border-slate-800">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-xs font-bold text-slate-300">معدل الالتزام الكلي</span>
-                                    <span class="text-sm font-black text-emerald-400 font-mono">85%</span>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="p-3 md:p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                                <div class="flex justify-between items-center mb-1.5">
+                                    <span class="text-[11px] font-bold text-slate-300">معدل الالتزام الكلي</span>
+                                    <span class="text-xs font-black text-emerald-400 font-mono">85%</span>
                                 </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
-                                    <div class="bg-gradient-to-r from-brand-500 to-emerald-400 h-2.5 rounded-full" style="width: 85%"></div>
+                                <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-brand-500 to-emerald-400 h-2 rounded-full" style="width: 85%"></div>
                                 </div>
-                                <p class="text-[10px] md:text-[11px] text-slate-400 mt-2">يعتمد بناءً على فتح الأدراج واستجابة البازر خلال الـ 30 يوماً الماضية.</p>
+                                <p class="text-[10px] text-slate-400 mt-1.5">يعتمد بناءً على فتح الأدراج واستجابة البازر خلال الـ 30 يوماً الماضية.</p>
                             </div>
 
-                            <div class="p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+                            <div class="p-3 md:p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
                                 <div class="flex justify-between items-center mb-1">
-                                    <span class="text-xs font-bold text-slate-300">مستوى مخاطر تفويت الجرعة</span>
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Medium Risk</span>
+                                    <span class="text-[11px] font-bold text-slate-300">مستوى مخاطر تفويت الجرعة</span>
+                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Medium Risk</span>
                                 </div>
-                                <div class="flex items-center gap-2 mt-2">
-                                    <div class="flex-1 h-2 bg-emerald-500 rounded-full opacity-30"></div>
-                                    <div class="flex-1 h-2 bg-amber-500 rounded-full"></div>
-                                    <div class="flex-1 h-2 bg-rose-500 rounded-full opacity-30"></div>
+                                <div class="flex items-center gap-2 mt-1.5">
+                                    <div class="flex-1 h-1.5 bg-emerald-500 rounded-full opacity-30"></div>
+                                    <div class="flex-1 h-1.5 bg-amber-500 rounded-full"></div>
+                                    <div class="flex-1 h-1.5 bg-rose-500 rounded-full opacity-30"></div>
                                 </div>
-                                <p class="text-[10px] md:text-[11px] text-slate-400 mt-2">مؤشر تنبؤي منخفض الخطورة خلال الساعات الـ 48 القادمة.</p>
+                                <p class="text-[10px] text-slate-400 mt-1.5">مؤشر تنبؤي منخفض الخطورة خلال الساعات الـ 48 القادمة.</p>
                             </div>
                         </div>
 
-                        <div class="space-y-2.5 md:space-y-3 pt-1">
-                            <h4 class="text-[11px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">التوقعات والتوصيات الذكية:</h4>
+                        <div class="space-y-2 pt-1">
+                            <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">التوقعات والتوصيات الذكية:</h4>
                             
-                            <div class="p-3 md:p-4 rounded-xl md:rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2.5">
-                                <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5 text-sm md:text-base"></i>
+                            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5 text-xs"></i>
                                 <div>
-                                    <p class="text-xs text-slate-200 font-bold">الجرعات المسائية هي الأكثر عرضة للنسيان بنسبة 45%.</p>
-                                    <p class="text-[10px] md:text-[11px] text-slate-400">تم ملاحظة تأخر المريض في الاستجابة للتنبيه على الدرج رقم 4 في عطلة نهاية الأسبوع.</p>
+                                    <p class="text-[11px] text-slate-200 font-bold">الجرعات المسائية هي الأكثر عرضة للنسيان بنسبة 45%.</p>
+                                    <p class="text-[10px] text-slate-400">تم ملاحظة تأخر المريض في الاستجابة للتنبيه على الدرج رقم 4 في عطلة نهاية الأسبوع.</p>
                                 </div>
                             </div>
 
-                            <div class="p-3 md:p-4 rounded-xl md:rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-start gap-2.5">
-                                <i class="fa-solid fa-chart-line text-brand-400 mt-0.5 text-sm md:text-base"></i>
+                            <div class="p-3 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-start gap-2">
+                                <i class="fa-solid fa-chart-line text-brand-400 mt-0.5 text-xs"></i>
                                 <div>
-                                    <p class="text-xs text-slate-200 font-bold">توقعات الذكاء الاصطناعي: احتمال مرتفع لتفويت جرعة يوم الجمعة القادم.</p>
-                                    <p class="text-[10px] md:text-[11px] text-slate-400">بسبب التغير المعتاد في نمط أنشطة المريض يوم الجمعة مساءً.</p>
+                                    <p class="text-[11px] text-slate-200 font-bold">توقعات الذكاء الاصطناعي: احتمال مرتفع لتفويت جرعة يوم الجمعة القادم.</p>
+                                    <p class="text-[10px] text-slate-400">بسبب التغير المعتاد في نمط أنشطة المريض يوم الجمعة مساءً.</p>
                                 </div>
                             </div>
 
-                            <div class="p-3 md:p-4 rounded-xl md:rounded-2xl bg-slate-900/80 border border-slate-800 flex items-start gap-2.5">
-                                <i class="fa-solid fa-lightbulb text-brand-400 mt-0.5 text-sm md:text-base"></i>
+                            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start gap-2">
+                                <i class="fa-solid fa-lightbulb text-brand-400 mt-0.5 text-xs"></i>
                                 <div>
-                                    <p class="text-xs text-slate-200 font-bold">توصية الذكاء الاصطناعي: تعديل موعد الجرعة إلى 8:30 مساءً بدلاً من 9:00.</p>
-                                    <p class="text-[10px] md:text-[11px] text-slate-400">لتحسين التوافق مع نمط نوم المريض ورفع نسبة الالتزام إلى 95%.</p>
+                                    <p class="text-[11px] text-slate-200 font-bold">توصية الذكاء الاصطناعي: تعديل موعد الجرعة إلى 8:30 مساءً بدلاً من 9:00.</p>
+                                    <p class="text-[10px] text-slate-400">لتحسين التوافق مع نمط نوم المريض ورفع نسبة الالتزام إلى 95%.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Chart (1 Column) -->
-                    <div class="glass-saas-card p-4 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between">
+                    <div class="glass-card-mobile p-4 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between">
                         <div>
-                            <h3 class="text-sm md:text-base font-bold text-white mb-1 flex items-center gap-2">
+                            <h3 class="text-xs md:text-base font-bold text-white mb-1 flex items-center gap-2">
                                 <i class="fa-solid fa-chart-pie text-brand-400"></i>
                                 توزيع الالتزام بالجرعات
                             </h3>
-                            <p class="text-[11px] text-slate-400 mb-3 md:mb-4">إحصائيات الأدراج الخمسة للجهاز</p>
+                            <p class="text-[10px] text-slate-400 mb-2">إحصائيات الأدراج الخمسة للجهاز</p>
                             
-                            <div class="relative w-full h-56 md:h-64 flex items-center justify-center">
+                            <div class="relative w-full h-48 md:h-64 flex items-center justify-center">
                                 <canvas id="adherenceChart"></canvas>
                             </div>
                         </div>
 
-                        <div class="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-slate-800 flex justify-between text-[11px] md:text-xs text-slate-300">
-                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span> مكتملة (85%)</span>
-                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> متأخرة (10%)</span>
-                            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> فائتة (5%)</span>
+                        <div class="mt-2 pt-2 border-t border-slate-800 flex justify-between text-[10px] text-slate-300">
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> مكتملة (85%)</span>
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span> متأخرة (10%)</span>
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500 inline-block"></span> فائتة (5%)</span>
                         </div>
                     </div>
                 </div>
@@ -491,29 +471,29 @@
 
 
             <!-- TAB VIEW 4: HARDWARE LOGS -->
-            <section id="view-logs" class="hidden space-y-4 md:space-y-6">
-                <div class="glass-saas-card p-4 md:p-6 rounded-2xl md:rounded-3xl space-y-4 md:space-y-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 md:pb-4 border-b border-slate-800">
+            <section id="view-logs" class="hidden space-y-3 md:space-y-6">
+                <div class="glass-card-mobile p-3.5 md:p-6 rounded-2xl md:rounded-3xl space-y-3 md:space-y-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-2.5 border-b border-slate-800">
                         <div>
-                            <h3 class="text-sm md:text-lg font-black text-white flex items-center gap-2">
+                            <h3 class="text-xs md:text-lg font-black text-white flex items-center gap-2">
                                 <i class="fa-solid fa-terminal text-brand-400"></i>
                                 سجل أحداث الـ ESP32 المباشر (Real-Time Logs)
                             </h3>
-                            <p class="text-[11px] md:text-xs text-slate-400 mt-0.5">مزامنة فورية عند تشغيل البازر، الـ LED، أو فتح الدرج عبر الفايربيس</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">مزامنة فورية عند تشغيل البازر، الـ LED، أو فتح الدرج عبر الفايربيس</p>
                         </div>
-                        <button onclick="clearLogsLocalView()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition border border-slate-700 font-bold self-start md:self-auto">
+                        <button onclick="clearLogsLocalView()" class="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] transition border border-slate-700 font-bold self-start md:self-auto">
                             <i class="fa-solid fa-eraser ml-1"></i> مسح السجل المحلي
                         </button>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-right text-xs md:text-sm text-slate-300">
-                            <thead class="text-[10px] md:text-xs uppercase bg-slate-900/80 text-slate-400 border-b border-slate-800">
+                        <table class="w-full text-right text-[11px] md:text-sm text-slate-300">
+                            <thead class="text-[9px] md:text-xs uppercase bg-slate-900/80 text-slate-400 border-b border-slate-800">
                                 <tr>
-                                    <th scope="col" class="py-3 px-3 font-bold">التوقيت (Time)</th>
-                                    <th scope="col" class="py-3 px-3 font-bold">معرف الدرج</th>
-                                    <th scope="col" class="py-3 px-3 font-bold">الحدث / الإجراء</th>
-                                    <th scope="col" class="py-3 px-3 font-bold">الحالة</th>
+                                    <th scope="col" class="py-2.5 px-2 font-bold">التوقيت</th>
+                                    <th scope="col" class="py-2.5 px-2 font-bold">معرف الدرج</th>
+                                    <th scope="col" class="py-2.5 px-2 font-bold">الإجراء</th>
+                                    <th scope="col" class="py-2.5 px-2 font-bold">الحالة</th>
                                 </tr>
                             </thead>
                             <tbody id="logs-table-body" class="divide-y divide-slate-800/60">
@@ -526,35 +506,35 @@
         </main>
     </div>
 
-    <!-- MOBILE NATIVE BOTTOM NAVIGATION BAR (Extremely Responsive & Native Feel) -->
-    <nav class="md:hidden fixed bottom-0 inset-x-0 bg-[#090e1a]/95 backdrop-blur-lg border-t border-slate-800/80 z-50 px-3 py-2 shadow-2xl">
+    <!-- NATIVE FLOATING BOTTOM APP BAR FOR MOBILE (Ultra Modern & Floating Native Feel) -->
+    <nav class="md:hidden fixed bottom-3 inset-x-3 bg-[#0d1424]/95 backdrop-blur-xl border border-slate-700/60 z-50 rounded-2xl px-2 py-1.5 shadow-2xl glow-purple">
         <div class="grid grid-cols-4 gap-1 text-center">
             
-            <button onclick="switchSaaSTab('drawers')" id="mob-btn-drawers" class="flex flex-col items-center justify-center py-1 rounded-xl transition-all text-brand-400 bg-brand-500/10">
+            <button onclick="switchSaaSTab('drawers')" id="mob-btn-drawers" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-brand-300 bg-brand-500/20 font-bold">
                 <i class="fa-solid fa-cubes text-base mb-0.5"></i>
-                <span class="text-[10px] font-bold">الأدراج</span>
+                <span class="text-[10px]">الأدراج</span>
             </button>
 
-            <button onclick="switchSaaSTab('timeline')" id="mob-btn-timeline" class="flex flex-col items-center justify-center py-1 rounded-xl transition-all text-slate-400">
+            <button onclick="switchSaaSTab('timeline')" id="mob-btn-timeline" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 font-bold">
                 <i class="fa-solid fa-clock-rotate-left text-base mb-0.5"></i>
-                <span class="text-[10px] font-bold">المواعيد</span>
+                <span class="text-[10px]">المواعيد</span>
             </button>
 
-            <button onclick="switchSaaSTab('ai')" id="mob-btn-ai" class="flex flex-col items-center justify-center py-1 rounded-xl transition-all text-slate-400">
+            <button onclick="switchSaaSTab('ai')" id="mob-btn-ai" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 font-bold">
                 <i class="fa-solid fa-brain text-base mb-0.5"></i>
-                <span class="text-[10px] font-bold">الذكاء</span>
+                <span class="text-[10px]">الذكاء</span>
             </button>
 
-            <button onclick="switchSaaSTab('logs')" id="mob-btn-logs" class="flex flex-col items-center justify-center py-1 rounded-xl transition-all text-slate-400">
+            <button onclick="switchSaaSTab('logs')" id="mob-btn-logs" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 font-bold">
                 <i class="fa-solid fa-terminal text-base mb-0.5"></i>
-                <span class="text-[10px] font-bold">السجل</span>
+                <span class="text-[10px]">السجل</span>
             </button>
 
         </div>
     </nav>
 
 
-    <!-- JAVASCRIPT & REALTIME FIREBASE INTEGRATION LOGIC -->
+    <!-- JAVASCRIPT & REALTIME FIREBASE LOGIC -->
     <script>
         const firebaseConfig = {
             databaseURL: "https://ehyaa-35076-default-rtdb.firebaseio.com/"
@@ -589,13 +569,13 @@
                     if (viewEl) viewEl.classList.remove('hidden');
                     if (sideBtn) sideBtn.classList.add('active');
                     if (mobBtn) {
-                        mobBtn.className = "flex flex-col items-center justify-center py-1 rounded-xl transition-all text-brand-400 bg-brand-500/10 font-bold";
+                        mobBtn.className = "flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-brand-300 bg-brand-500/20 font-bold shadow-sm";
                     }
                 } else {
                     if (viewEl) viewEl.classList.add('hidden');
                     if (sideBtn) sideBtn.classList.remove('active');
                     if (mobBtn) {
-                        mobBtn.className = "flex flex-col items-center justify-center py-1 rounded-xl transition-all text-slate-400 hover:text-slate-200 font-bold";
+                        mobBtn.className = "flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 font-bold";
                     }
                 }
             });
@@ -613,9 +593,9 @@
                 const btn = document.getElementById(`drawer-flt-${f}`);
                 if (btn) {
                     if (f === filter) {
-                        btn.className = "flex-1 md:flex-none px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-lg shadow-brand-600/30 whitespace-nowrap text-center";
+                        btn.className = "flex-1 md:flex-none px-3 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-brand-600 text-white shadow-md text-center";
                     } else {
-                        btn.className = "flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700 text-center";
+                        btn.className = "flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center";
                     }
                 }
             });
@@ -634,22 +614,22 @@
                 const drawer = drawersData[id];
                 const card = document.createElement('div');
                 card.id = `drawer-card-${id}`;
-                card.className = `glass-saas-card p-4 md:p-5 rounded-2xl md:rounded-3xl flex flex-col justify-between relative overflow-hidden`;
+                card.className = `glass-card-mobile p-3.5 md:p-5 rounded-2xl md:rounded-3xl flex flex-col justify-between relative overflow-hidden`;
 
                 let statusBadgeHTML = '';
                 if (drawer.status === 'Completed') {
-                    statusBadgeHTML = `<span class="px-2.5 py-0.5 text-[10px] md:text-[11px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> مكتملة</span>`;
+                    statusBadgeHTML = `<span class="px-2 py-0.5 text-[9px] md:text-[11px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> مكتملة</span>`;
                 } else if (drawer.status === 'Active Session') {
-                    statusBadgeHTML = `<span class="px-2.5 py-0.5 text-[10px] md:text-[11px] font-bold rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse flex items-center gap-1"><i class="fa-solid fa-bell animate-bounce"></i> جلسة نشطة</span>`;
+                    statusBadgeHTML = `<span class="px-2 py-0.5 text-[9px] md:text-[11px] font-bold rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse flex items-center gap-1"><i class="fa-solid fa-bell animate-bounce"></i> جلسة نشطة</span>`;
                 } else {
-                    statusBadgeHTML = `<span class="px-2.5 py-0.5 text-[10px] md:text-[11px] font-bold rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1"><i class="fa-solid fa-hourglass-half"></i> قيد الانتظار</span>`;
+                    statusBadgeHTML = `<span class="px-2 py-0.5 text-[9px] md:text-[11px] font-bold rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1"><i class="fa-solid fa-hourglass-half"></i> قيد الانتظار</span>`;
                 }
 
                 let scheduleSlotsHTML = drawer.schedules.map((t, idx) => `
-                    <div class="flex items-center gap-1 bg-brand-500/10 border border-brand-500/20 px-2 py-0.5 rounded-lg text-[10px] md:text-[11px] font-bold text-brand-300 font-mono">
-                        <i class="fa-regular fa-clock text-[9px]"></i>
+                    <div class="flex items-center gap-1 bg-brand-500/10 border border-brand-500/20 px-2 py-0.5 rounded-lg text-[9px] md:text-[11px] font-bold text-brand-300 font-mono">
+                        <i class="fa-regular fa-clock text-[8px]"></i>
                         <span>${t}</span>
-                        <button onclick="removeTimeSlot(${id}, ${idx})" class="text-rose-400 hover:text-rose-300 mr-1 text-[9px]">
+                        <button onclick="removeTimeSlot(${id}, ${idx})" class="text-rose-400 hover:text-rose-300 mr-1 text-[8px]">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -657,66 +637,66 @@
 
                 card.innerHTML = `
                     <div>
-                        <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center justify-between mb-2.5">
                             <span class="w-7 h-7 md:w-8 md:h-8 rounded-xl bg-brand-500/20 text-brand-300 font-black flex items-center justify-center text-xs md:text-sm border border-brand-500/30 font-mono">#${id}</span>
                             <div id="drawer-status-badge-${id}">
                                 ${statusBadgeHTML}
                             </div>
                         </div>
 
-                        <div class="space-y-2.5 mb-3">
+                        <div class="space-y-2 mb-3">
                             <div>
-                                <label class="text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-capsules text-brand-400 ml-1"></i>اسم العلاج (Medication Name):</label>
+                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-capsules text-brand-400 ml-1"></i>اسم العلاج (Medication Name):</label>
                                 <input type="text" id="input-name-${id}" value="${drawer.name || ''}" 
-                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-semibold">
+                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-semibold">
                             </div>
 
                             <div>
-                                <label class="text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-stethoscope text-brand-400 ml-1"></i>دواعي الاستعمال (Purpose):</label>
+                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-stethoscope text-brand-400 ml-1"></i>دواعي الاستعمال (Purpose):</label>
                                 <input type="text" id="input-purpose-${id}" value="${drawer.purpose || ''}" placeholder="مثال: مسكن صداع، ضغط..." 
-                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-semibold">
+                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-semibold">
                             </div>
 
                             <div>
-                                <label class="text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-vial text-brand-400 ml-1"></i>الكمية / الجرعة (Quantity):</label>
+                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-vial text-brand-400 ml-1"></i>الكمية / الجرعة (Quantity):</label>
                                 <input type="text" id="input-quantity-${id}" value="${drawer.quantity || ''}" placeholder="مثال: 1 قرص، نصف ملعقة..." 
-                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-semibold">
+                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-semibold">
                             </div>
 
                             <div>
-                                <label class="text-[10px] text-slate-400 font-bold block mb-1"><i class="fa-solid fa-clock text-brand-400 ml-1"></i>مواعيد الجرعات اليومية:</label>
-                                <div class="flex flex-wrap gap-1 mb-2">
+                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-1"><i class="fa-solid fa-clock text-brand-400 ml-1"></i>مواعيد الجرعات اليومية:</label>
+                                <div class="flex flex-wrap gap-1 mb-1.5">
                                     ${scheduleSlotsHTML}
                                 </div>
-                                <div class="flex gap-1.5">
+                                <div class="flex gap-1">
                                     <input type="text" id="input-add-time-${id}" placeholder="08:00 AM" 
-                                        class="flex-1 bg-slate-900/90 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-mono">
+                                        class="flex-1 bg-slate-900/90 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-mono">
                                     <button onclick="addTimeSlot(${id})" 
-                                        class="px-3 py-1.5 rounded-xl bg-brand-500/20 hover:bg-brand-500/30 text-brand-300 font-bold text-xs border border-brand-500/30 transition">
+                                        class="px-2.5 py-1 rounded-xl bg-brand-500/20 hover:bg-brand-500/30 text-brand-300 font-bold text-xs border border-brand-500/30 transition">
                                         <i class="fa-solid fa-plus ml-1"></i>موعد
                                     </button>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="text-[10px] text-brand-300 font-bold block mb-0.5">
+                                <label class="text-[9px] md:text-[10px] text-brand-300 font-bold block mb-0.5">
                                     <i class="fa-brands fa-telegram text-brand-400 ml-1"></i> نص رسالة التليجرام:
                                 </label>
                                 <textarea id="input-telegram-${id}" rows="2" 
-                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-2 text-[11px] text-slate-200 focus:outline-none focus:border-brand-500 resize-none font-semibold leading-relaxed">${drawer.custom_message || ''}</textarea>
+                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-2 text-[10px] md:text-[11px] text-slate-200 focus:outline-none focus:border-brand-500 resize-none font-semibold leading-relaxed">${drawer.custom_message || ''}</textarea>
                             </div>
                         </div>
                     </div>
 
-                    <div class="space-y-2 pt-2.5 border-t border-slate-800/80">
+                    <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
                         <button onclick="saveDrawerConfig(${id})" 
-                            class="w-full py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer">
+                            class="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer">
                             <i class="fa-solid fa-floppy-disk"></i>
                             <span>حفظ الإعدادات في Firebase</span>
                         </button>
 
                         <button onclick="triggerDrawerAlarm(${id})" 
-                            class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-800 hover:from-brand-500 hover:to-brand-700 text-white font-bold text-xs shadow-lg shadow-brand-600/30 transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer">
+                            class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-800 hover:from-brand-500 hover:to-brand-700 text-white font-bold text-xs shadow-lg shadow-brand-600/30 transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer">
                             <i class="fa-solid fa-bell"></i>
                             <span>إطلاق التنبيه (Trigger Alarm)</span>
                         </button>
@@ -751,23 +731,23 @@
 
             allSchedules.forEach(item => {
                 const row = document.createElement('div');
-                row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 md:p-4 rounded-xl md:rounded-2xl bg-slate-900/80 border border-slate-800 gap-2.5";
+                row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-slate-900/80 border border-slate-800 gap-2";
                 
                 row.innerHTML = `
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2.5">
                         <div class="px-2.5 py-1 rounded-xl bg-brand-600 text-white font-mono font-bold text-xs shadow-sm">
                             ${item.time}
                         </div>
                         <div>
                             <div class="flex items-center gap-2">
                                 <span class="font-extrabold text-xs md:text-sm text-slate-100">${item.name}</span>
-                                <span class="px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30">درج #${item.drawerId}</span>
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30">درج #${item.drawerId}</span>
                             </div>
-                            <p class="text-[11px] text-slate-400 mt-0.5">${item.purpose || ''} | ${item.quantity || ''}</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">${item.purpose || ''} | ${item.quantity || ''}</p>
                         </div>
                     </div>
 
-                    <button onclick="triggerDrawerAlarm(${item.drawerId})" class="self-end sm:self-auto px-3 py-1.5 rounded-xl bg-brand-500/20 hover:bg-brand-600 hover:text-white text-brand-300 text-xs font-bold transition border border-brand-500/30 flex items-center gap-1.5">
+                    <button onclick="triggerDrawerAlarm(${item.drawerId})" class="self-end sm:self-auto px-3 py-1 rounded-xl bg-brand-500/20 hover:bg-brand-600 hover:text-white text-brand-300 text-xs font-bold transition border border-brand-500/30 flex items-center gap-1.5">
                         <i class="fa-solid fa-bell"></i>
                         <span>تنبيه الدرج</span>
                     </button>
@@ -958,7 +938,7 @@
                 activeCard.classList.add('pulse-live-rose');
                 const badge = document.getElementById(`drawer-status-badge-${drawerId}`);
                 if (badge) {
-                    badge.innerHTML = `<span class="px-2.5 py-0.5 text-[10px] md:text-[11px] font-bold rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse flex items-center gap-1"><i class="fa-solid fa-bell animate-bounce"></i> جلسة نشطة</span>`;
+                    badge.innerHTML = `<span class="px-2 py-0.5 text-[9px] md:text-[11px] font-bold rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse flex items-center gap-1"><i class="fa-solid fa-bell animate-bounce"></i> جلسة نشطة</span>`;
                 }
             }
         }
@@ -971,7 +951,7 @@
 
             const badge = document.getElementById(`drawer-status-badge-${drawerId}`);
             if (badge) {
-                badge.innerHTML = `<span class="px-2.5 py-0.5 text-[10px] md:text-[11px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> مكتملة</span>`;
+                badge.innerHTML = `<span class="px-2 py-0.5 text-[9px] md:text-[11px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> مكتملة</span>`;
             }
         }
 
@@ -1013,18 +993,18 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-900/50 transition-colors";
 
-                let statusBadge = `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300">${log.status}</span>`;
+                let statusBadge = `<span class="px-2 py-0.5 rounded-lg text-[10px] md:text-xs font-bold bg-slate-800 text-slate-300">${log.status}</span>`;
                 if (log.status.includes('Completed') || log.status.includes('مكتملة') || log.status.includes('بنجاح') || log.status.includes('Firebase')) {
-                    statusBadge = `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">${log.status}</span>`;
+                    statusBadge = `<span class="px-2 py-0.5 rounded-lg text-[10px] md:text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">${log.status}</span>`;
                 } else if (log.status.includes('تنبيه') || log.status.includes('ESP32') || log.status.includes('Started')) {
-                    statusBadge = `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">${log.status}</span>`;
+                    statusBadge = `<span class="px-2 py-0.5 rounded-lg text-[10px] md:text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">${log.status}</span>`;
                 }
 
                 tr.innerHTML = `
-                    <td class="py-3 px-3 text-xs font-mono text-slate-400 font-bold">${log.time}</td>
-                    <td class="py-3 px-3 font-black text-brand-300 text-xs font-mono">${log.drawerId}</td>
-                    <td class="py-3 px-3 text-xs text-slate-200 font-semibold">${log.action}</td>
-                    <td class="py-3 px-3 text-xs">${statusBadge}</td>
+                    <td class="py-2.5 px-2 text-[10px] md:text-xs font-mono text-slate-400 font-bold">${log.time}</td>
+                    <td class="py-2.5 px-2 font-black text-brand-300 text-[10px] md:text-xs font-mono">${log.drawerId}</td>
+                    <td class="py-2.5 px-2 text-[10px] md:text-xs text-slate-200 font-semibold">${log.action}</td>
+                    <td class="py-2.5 px-2 text-[10px] md:text-xs">${statusBadge}</td>
                 `;
 
                 tbody.appendChild(tr);
@@ -1068,7 +1048,7 @@
                     datasets: [{
                         data: [85, 10, 5],
                         backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
-                        borderColor: '#0d1320',
+                        borderColor: '#0e1422',
                         borderWidth: 3
                     }]
                 },
