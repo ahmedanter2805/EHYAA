@@ -113,425 +113,497 @@
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
     </style>
 </head>
-<body class="h-full bg-[#050810] text-slate-100 flex flex-col md:flex-row overflow-x-hidden">
+<body class="h-full bg-[#050810] text-slate-100 flex flex-col overflow-x-hidden relative">
 
-    <!-- Active Alarm SaaS Toast Banner -->
-    <div id="active-session-banner" class="hidden fixed top-0 inset-x-0 z-50 transition-all duration-500">
-        <div class="bg-gradient-to-r from-rose-600 via-pink-600 to-red-600 text-white px-4 md:px-6 py-3 shadow-2xl flex items-center justify-between border-b border-rose-400/40">
-            <div class="flex items-center space-x-3 space-x-reverse container mx-auto">
-                <span class="flex h-3 w-3 relative">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-                </span>
-                <i class="fa-solid fa-triangle-exclamation text-lg animate-bounce"></i>
-                <div>
-                    <h4 class="font-black text-xs md:text-base tracking-wide" id="banner-text">🚨 الجلسة نشطة الآن: جارٍ تنبيه المريض للدرج رقم --</h4>
-                    <p class="text-[10px] text-rose-100 font-light hidden sm:block">جهاز ESP32 يطلق التنبيه البصري والصوتي ويرسل الإشعار للتليجرام</p>
-                </div>
-            </div>
-            <button onclick="dismissBanner()" class="text-white hover:text-rose-200 text-lg px-2 py-1">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- SIDEBAR NAVIGATION FOR DESKTOP ONLY -->
-    <aside class="w-full md:w-72 bg-[#090e1a] border-b md:border-b-0 md:border-l border-slate-800/80 flex-shrink-0 sticky top-0 z-40 md:h-screen md:sticky hidden md:flex flex-col justify-between">
-        <div class="p-5 space-y-6">
-            
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 p-0.5 glow-purple">
-                        <div class="w-full h-full bg-[#090e1a] rounded-[14px] flex items-center justify-center">
-                            <img src="logo.png" alt="Ehyāa Logo" class="h-7 w-auto object-contain" />
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h1 class="text-xl font-black tracking-tight text-white font-jakarta">Ehyāa</h1>
-                            <span class="text-xs px-2 py-0.5 rounded-md bg-brand-500/20 text-brand-300 font-mono font-bold border border-brand-500/30">v3.0 Ultra</span>
-                        </div>
-                        <p class="text-[10px] text-slate-400 font-semibold">منصة الموزع الطبي الذكي</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <span id="esp-status-led" class="w-3 h-3 rounded-full bg-emerald-500 pulse-live-emerald"></span>
-                    <div>
-                        <span class="text-[10px] text-slate-400 font-bold block">Firebase RTDB</span>
-                        <span id="esp-status-text" class="text-xs font-black text-emerald-400 font-mono">CONNECTED (LIVE)</span>
-                    </div>
-                </div>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono">Synced</span>
-            </div>
-
-            <nav class="space-y-1">
-                <button onclick="switchSaaSTab('drawers')" id="side-btn-drawers" class="sidebar-link active w-full px-4 py-3 rounded-xl text-xs text-right transition-all flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-cubes text-base text-brand-400"></i>
-                        <span>أدراج الدواء الخمسة</span>
-                    </div>
-                    <span class="px-2 py-0.5 rounded-md bg-brand-500/20 text-brand-300 text-[10px] font-bold">5</span>
-                </button>
-
-                <button onclick="switchSaaSTab('timeline')" id="side-btn-timeline" class="sidebar-link w-full px-4 py-3 rounded-xl text-xs text-right transition-all flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-clock-rotate-left text-base text-slate-400"></i>
-                        <span>الجدول الزمني المجدول</span>
-                    </div>
-                    <span id="timeline-count-badge" class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[10px] font-bold">--</span>
-                </button>
-
-                <button onclick="switchSaaSTab('ai')" id="side-btn-ai" class="sidebar-link w-full px-4 py-3 rounded-xl text-xs text-right transition-all flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-brain text-base text-slate-400"></i>
-                        <span>تحليلات الذكاء الاصطناعي</span>
-                    </div>
-                    <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[9px] font-bold">85%</span>
-                </button>
-
-                <button onclick="switchSaaSTab('logs')" id="side-btn-logs" class="sidebar-link w-full px-4 py-3 rounded-xl text-xs text-right transition-all flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-terminal text-base text-slate-400"></i>
-                        <span>سجلات الـ ESP32 الحية</span>
-                    </div>
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                </button>
-            </nav>
-
-        </div>
-
-        <div class="p-5 border-t border-slate-800/80 space-y-3 bg-[#070b14]">
-            <div class="flex items-center justify-between text-xs font-mono bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-                <div class="flex items-center gap-2">
-                    <i class="fa-regular fa-clock text-brand-400"></i>
-                    <span id="local-clock" class="font-bold text-slate-200">00:00:00</span>
-                </div>
-                <span id="utc-clock" class="text-[10px] text-slate-500">UTC</span>
-            </div>
-
-            <div class="flex items-center gap-3 pt-1">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 text-white flex items-center justify-center font-bold text-xs shadow-sm">
-                    <i class="fa-solid fa-user-doctor"></i>
-                </div>
-                <div class="text-right overflow-hidden">
-                    <div class="text-xs font-bold text-slate-200 truncate">doctor@ehyaa.med</div>
-                    <span class="text-[10px] text-brand-400 font-semibold">الطبيب المشرف</span>
-                </div>
-            </div>
-        </div>
-
-    </aside>
-
-    <!-- MAIN SAAS WORKSPACE CONTENT -->
-    <div class="flex-1 flex flex-col min-w-0 bg-[#050810] pb-safe-bottom">
+    <!-- ========================================== -->
+    <!-- LOGIN SCREEN -->
+    <!-- ========================================== -->
+    <div id="app-login" class="flex-1 flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-[#050810] via-[#0a0f1c] to-[#050810] relative overflow-hidden hidden">
         
-        <!-- Desktop Desktop Top Bar -->
-        <header class="hidden md:flex bg-[#090e1a]/90 border-b border-slate-800/80 px-8 py-4 items-center justify-between backdrop-blur-md sticky top-0 z-30">
-            <div>
-                <h2 class="text-lg font-black text-white font-jakarta">Ehyāa Realtime Control Center</h2>
-                <p class="text-xs text-slate-400">مربوط فورياً مع Firebase Database: <span class="font-mono text-brand-300">ehyaa-35076-default-rtdb</span></p>
-            </div>
-            
-            <div class="flex items-center gap-3">
-                <span id="session-status-summary" class="px-3.5 py-1.5 rounded-xl bg-slate-900 text-slate-300 text-xs font-bold border border-slate-800 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-                    جاهز للمراقبة
-                </span>
-                <div class="px-3.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-fire text-amber-500"></i>
-                    Firebase Sync Active
-                </div>
-            </div>
-        </header>
+        <!-- Decorative Glows -->
+        <div class="absolute top-1/4 -right-20 w-64 h-64 bg-brand-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20"></div>
+        <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20"></div>
 
-        <main class="p-3 md:p-8 max-w-7xl w-full mx-auto space-y-3 md:space-y-8">
-
-            <!-- MOBILE NATIVE MINIMAL BRAND & STATUS HEADER BAR -->
-            <div class="md:hidden flex items-center justify-between pt-2 pb-1 px-1">
-                <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center p-1 glow-purple">
-                        <img src="logo.png" alt="Ehyāa Logo" class="h-4 w-auto object-contain" />
-                    </div>
-                    <div>
-                        <h1 class="text-sm font-black text-white font-jakarta leading-none">Ehyāa <span class="text-brand-400 text-[10px]">Cloud</span></h1>
-                    </div>
+        <div class="w-full max-w-md glass-card-mobile p-8 rounded-3xl z-10">
+            <div class="flex flex-col items-center mb-8">
+                <div class="w-16 h-16 rounded-2xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center p-2 glow-purple mb-4">
+                    <img src="logo.png" alt="Ehyāa Logo" class="h-10 w-auto object-contain drop-shadow-lg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2966/2966327.png'"/>
                 </div>
-
-                <div class="flex items-center gap-1.5">
-                    <div class="flex items-center gap-1 bg-slate-900/90 px-2 py-0.5 rounded-lg border border-slate-800 text-[10px]">
-                        <span id="mobile-esp-led" class="w-2 h-2 rounded-full bg-emerald-500 pulse-live-emerald"></span>
-                        <span class="font-bold text-emerald-400 font-mono">ESP32 ON</span>
-                    </div>
-                    <div class="font-mono text-slate-300 text-[10px] bg-slate-900/90 px-1.5 py-0.5 rounded-lg border border-slate-800" id="mobile-clock">00:00:00</div>
-                </div>
+                <h1 class="text-3xl font-black text-white font-jakarta tracking-tight">Ehyāa <span class="text-brand-400">Cloud</span></h1>
+                <p class="text-sm text-slate-400 mt-2 font-semibold">بوابة الموزع الطبي الذكي - تسجيل الدخول</p>
             </div>
 
-            <!-- COMPACT MOBILE & DESKTOP QUICK STATS -->
-            <section class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-5">
-                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block">الأدراج النشطة</span>
-                            <h3 class="text-sm md:text-2xl font-black text-white font-jakarta">5 Drawers</h3>
+            <form id="login-form" class="space-y-5" onsubmit="event.preventDefault(); handleLogin();">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5 ml-1">البريد الإلكتروني</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-envelope"></i>
                         </div>
-                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-brand-500/10 text-brand-400 flex items-center justify-center text-xs md:text-xl">
-                            <i class="fa-solid fa-microchip"></i>
-                        </div>
+                        <input type="email" id="login-email" required placeholder="name@ehyaa.med"
+                            class="w-full bg-slate-900/80 border border-slate-700/80 rounded-xl pr-10 pl-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner">
                     </div>
                 </div>
 
-                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block">التزام المريض</span>
-                            <h3 class="text-sm md:text-2xl font-black text-emerald-400 font-jakarta">85%</h3>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5 ml-1">كلمة المرور</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
                         </div>
-                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs md:text-xl">
-                            <i class="fa-solid fa-chart-line"></i>
-                        </div>
+                        <input type="password" id="login-password" required placeholder="••••••••"
+                            class="w-full bg-slate-900/80 border border-slate-700/80 rounded-xl pr-10 pl-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner">
                     </div>
                 </div>
 
-                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block">المخاطر التنبؤية</span>
-                            <h3 class="text-sm md:text-2xl font-black text-amber-400 font-jakarta">Low Risk</h3>
-                        </div>
-                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs md:text-xl">
-                            <i class="fa-solid fa-shield-heart"></i>
-                        </div>
-                    </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-800 hover:from-brand-500 hover:to-brand-700 text-white font-black text-sm shadow-lg shadow-brand-600/30 transition transform active:scale-[0.98]">
+                        تسجيل الدخول الدخول
+                    </button>
                 </div>
+            </form>
 
-                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] md:text-xs text-slate-400 font-bold block">تنبيهات التليجرام</span>
-                            <h3 class="text-sm md:text-2xl font-black text-indigo-400 font-jakarta">4 Chats</h3>
-                        </div>
-                        <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xs md:text-xl">
-                            <i class="fa-brands fa-telegram"></i>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-
-            <!-- TAB VIEW 1: 5 SMART DRAWERS CARDS -->
-            <section id="view-drawers" class="space-y-3 md:space-y-6">
-                
-                <!-- Drawer Section Selector Header -->
-                <div class="glass-card-mobile p-3 md:p-5 rounded-2xl md:rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-2.5">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs md:text-lg font-black text-white flex items-center gap-2">
-                            <i class="fa-solid fa-boxes-stacked text-brand-400"></i>
-                            إدارة الأدراج والمواعيد
-                        </h3>
-                        <span class="md:hidden text-[10px] text-slate-400 font-bold">اختر الدرج ➔</span>
-                    </div>
-
-                    <!-- Mobile Native Segmented Drawer Filter Tabs -->
-                    <div class="flex items-center gap-1 overflow-x-auto pb-0.5 md:pb-0 w-full md:w-auto">
-                        <button onclick="selectDrawerFilter('all')" id="drawer-flt-all" class="flex-1 md:flex-none px-3 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-brand-600 text-white shadow-md text-center">الكل (5)</button>
-                        <button onclick="selectDrawerFilter(1)" id="drawer-flt-1" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #1</button>
-                        <button onclick="selectDrawerFilter(2)" id="drawer-flt-2" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #2</button>
-                        <button onclick="selectDrawerFilter(3)" id="drawer-flt-3" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #3</button>
-                        <button onclick="selectDrawerFilter(4)" id="drawer-flt-4" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #4</button>
-                        <button onclick="selectDrawerFilter(5)" id="drawer-flt-5" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #5</button>
-                    </div>
-                </div>
-
-                <!-- 5 Drawers Grid -->
-                <div id="drawers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-6">
-                    <!-- Dynamic Drawer Cards -->
-                </div>
-            </section>
-
-
-            <!-- TAB VIEW 2: DAILY SCHEDULE TIMELINE -->
-            <section id="view-timeline" class="hidden space-y-3 md:space-y-6">
-                <div class="glass-card-mobile p-4 md:p-6 rounded-2xl md:rounded-3xl space-y-3 md:space-y-6">
-                    <div class="flex items-center justify-between pb-2.5 md:pb-4 border-b border-slate-800">
-                        <div>
-                            <h3 class="text-xs md:text-lg font-black text-white flex items-center gap-2">
-                                <i class="fa-solid fa-calendar-check text-brand-400"></i>
-                                جدول المواعيد اليومية (Daily Timeline)
-                            </h3>
-                            <p class="text-[10px] md:text-xs text-slate-400 mt-0.5">ترتيب زمني متسلسل لجميع مواعيد جرعات اليوم المقررة</p>
-                        </div>
-                    </div>
-
-                    <div id="timeline-container" class="space-y-2.5">
-                        <!-- Mobile Timeline List -->
-                    </div>
-                </div>
-            </section>
-
-
-            <!-- TAB VIEW 3: AI ANALYTICS & INSIGHTS -->
-            <section id="view-ai" class="hidden space-y-3 md:space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6">
-                    
-                    <!-- AI Module (2 Columns) -->
-                    <div class="lg:col-span-2 glass-card-mobile p-4 md:p-6 rounded-2xl md:rounded-3xl space-y-4 md:space-y-6">
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                            <div class="flex items-center space-x-2.5 space-x-reverse">
-                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center text-sm md:text-lg">
-                                    <i class="fa-solid fa-brain"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-xs md:text-base font-black text-white">🤖 تحليلات الذكاء الاصطناعي (AI Insights)</h3>
-                                    <p class="text-[10px] md:text-xs text-slate-400">تحليل التزام المرضى والتوقعات التنبؤية</p>
-                                </div>
-                            </div>
-                            <span class="px-2 py-0.5 text-[9px] md:text-xs font-bold rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">v3.0 Ultra</span>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div class="p-3 md:p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-                                <div class="flex justify-between items-center mb-1.5">
-                                    <span class="text-[11px] font-bold text-slate-300">معدل الالتزام الكلي</span>
-                                    <span class="text-xs font-black text-emerald-400 font-mono">85%</span>
-                                </div>
-                                <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                                    <div class="bg-gradient-to-r from-brand-500 to-emerald-400 h-2 rounded-full" style="width: 85%"></div>
-                                </div>
-                                <p class="text-[10px] text-slate-400 mt-1.5">يعتمد بناءً على فتح الأدراج واستجابة البازر خلال الـ 30 يوماً الماضية.</p>
-                            </div>
-
-                            <div class="p-3 md:p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-[11px] font-bold text-slate-300">مستوى مخاطر تفويت الجرعة</span>
-                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Medium Risk</span>
-                                </div>
-                                <div class="flex items-center gap-2 mt-1.5">
-                                    <div class="flex-1 h-1.5 bg-emerald-500 rounded-full opacity-30"></div>
-                                    <div class="flex-1 h-1.5 bg-amber-500 rounded-full"></div>
-                                    <div class="flex-1 h-1.5 bg-rose-500 rounded-full opacity-30"></div>
-                                </div>
-                                <p class="text-[10px] text-slate-400 mt-1.5">مؤشر تنبؤي منخفض الخطورة خلال الساعات الـ 48 القادمة.</p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-2 pt-1">
-                            <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">التوقعات والتوصيات الذكية:</h4>
-                            
-                            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2">
-                                <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5 text-xs"></i>
-                                <div>
-                                    <p class="text-[11px] text-slate-200 font-bold">الجرعات المسائية هي الأكثر عرضة للنسيان بنسبة 45%.</p>
-                                    <p class="text-[10px] text-slate-400">تم ملاحظة تأخر المريض في الاستجابة للتنبيه على الدرج رقم 4 في عطلة نهاية الأسبوع.</p>
-                                </div>
-                            </div>
-
-                            <div class="p-3 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-start gap-2">
-                                <i class="fa-solid fa-chart-line text-brand-400 mt-0.5 text-xs"></i>
-                                <div>
-                                    <p class="text-[11px] text-slate-200 font-bold">توقعات الذكاء الاصطناعي: احتمال مرتفع لتفويت جرعة يوم الجمعة القادم.</p>
-                                    <p class="text-[10px] text-slate-400">بسبب التغير المعتاد في نمط أنشطة المريض يوم الجمعة مساءً.</p>
-                                </div>
-                            </div>
-
-                            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start gap-2">
-                                <i class="fa-solid fa-lightbulb text-brand-400 mt-0.5 text-xs"></i>
-                                <div>
-                                    <p class="text-[11px] text-slate-200 font-bold">توصية الذكاء الاصطناعي: تعديل موعد الجرعة إلى 8:30 مساءً بدلاً من 9:00.</p>
-                                    <p class="text-[10px] text-slate-400">لتحسين التوافق مع نمط نوم المريض ورفع نسبة الالتزام إلى 95%.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Chart (1 Column) -->
-                    <div class="glass-card-mobile p-4 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-xs md:text-base font-bold text-white mb-1 flex items-center gap-2">
-                                <i class="fa-solid fa-chart-pie text-brand-400"></i>
-                                توزيع الالتزام بالجرعات
-                            </h3>
-                            <p class="text-[10px] text-slate-400 mb-2">إحصائيات الأدراج الخمسة للجهاز</p>
-                            
-                            <div class="relative w-full h-48 md:h-64 flex items-center justify-center">
-                                <canvas id="adherenceChart"></canvas>
-                            </div>
-                        </div>
-
-                        <div class="mt-2 pt-2 border-t border-slate-800 flex justify-between text-[10px] text-slate-300">
-                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> مكتملة (85%)</span>
-                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span> متأخرة (10%)</span>
-                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500 inline-block"></span> فائتة (5%)</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-
-            <!-- TAB VIEW 4: HARDWARE LOGS -->
-            <section id="view-logs" class="hidden space-y-3 md:space-y-6">
-                <div class="glass-card-mobile p-3.5 md:p-6 rounded-2xl md:rounded-3xl space-y-3 md:space-y-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-2.5 border-b border-slate-800">
-                        <div>
-                            <h3 class="text-xs md:text-lg font-black text-white flex items-center gap-2">
-                                <i class="fa-solid fa-terminal text-brand-400"></i>
-                                سجل أحداث الـ ESP32 المباشر (Real-Time Logs)
-                            </h3>
-                            <p class="text-[10px] text-slate-400 mt-0.5">مزامنة فورية عند تشغيل البازر، الـ LED، أو فتح الدرج عبر الفايربيس</p>
-                        </div>
-                        <button onclick="clearLogsLocalView()" class="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] transition border border-slate-700 font-bold self-start md:self-auto">
-                            <i class="fa-solid fa-eraser ml-1"></i> مسح السجل المحلي
-                        </button>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right text-[11px] md:text-sm text-slate-300">
-                            <thead class="text-[9px] md:text-xs uppercase bg-slate-900/80 text-slate-400 border-b border-slate-800">
-                                <tr>
-                                    <th scope="col" class="py-2.5 px-2 font-bold">التوقيت</th>
-                                    <th scope="col" class="py-2.5 px-2 font-bold">معرف الدرج</th>
-                                    <th scope="col" class="py-2.5 px-2 font-bold">الإجراء</th>
-                                    <th scope="col" class="py-2.5 px-2 font-bold">الحالة</th>
-                                </tr>
-                            </thead>
-                            <tbody id="logs-table-body" class="divide-y divide-slate-800/60">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+            <div class="mt-6 p-4 rounded-xl bg-slate-800/40 border border-slate-700/50 text-xs text-slate-400 leading-relaxed">
+                <span class="font-bold text-brand-300 block mb-1"><i class="fa-solid fa-circle-info ml-1"></i> حسابات تجريبية (المرور: 123456)</span>
+                <ul class="list-disc list-inside space-y-1 mr-1">
+                    <li><code class="text-amber-300 bg-amber-900/30 px-1 rounded">doctor@ehyaa.med</code> - طبيب (صلاحية كاملة)</li>
+                    <li><code class="text-blue-300 bg-blue-900/30 px-1 rounded">caregiver@ehyaa.med</code> - مرافق (إطلاق تنبيه فقط)</li>
+                    <li><code class="text-emerald-300 bg-emerald-900/30 px-1 rounded">patient@ehyaa.med</code> - مريض (مشاهدة فقط)</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <!-- NATIVE FLOATING BOTTOM APP BAR FOR MOBILE (Ultra Modern & Floating Native Feel) -->
-    <nav class="md:hidden fixed bottom-3 inset-x-3 bg-[#0d1424]/95 backdrop-blur-xl border border-slate-700/60 z-50 rounded-2xl px-2 py-1.5 shadow-2xl glow-purple">
-        <div class="grid grid-cols-4 gap-1 text-center">
-            
-            <button onclick="switchSaaSTab('drawers')" id="mob-btn-drawers" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-brand-300 bg-brand-500/20 font-bold">
-                <i class="fa-solid fa-cubes text-base mb-0.5"></i>
-                <span class="text-[10px]">الأدراج</span>
-            </button>
 
-            <button onclick="switchSaaSTab('timeline')" id="mob-btn-timeline" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 font-bold">
-                <i class="fa-solid fa-clock-rotate-left text-base mb-0.5"></i>
-                <span class="text-[10px]">المواعيد</span>
-            </button>
-
-            <button onclick="switchSaaSTab('ai')" id="mob-btn-ai" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 font-bold">
-                <i class="fa-solid fa-brain text-base mb-0.5"></i>
-                <span class="text-[10px]">الذكاء</span>
-            </button>
-
-            <button onclick="switchSaaSTab('logs')" id="mob-btn-logs" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 font-bold">
-                <i class="fa-solid fa-terminal text-base mb-0.5"></i>
-                <span class="text-[10px]">السجل</span>
-            </button>
-
+    <!-- ========================================== -->
+    <!-- MAIN APP DASHBOARD -->
+    <!-- ========================================== -->
+    <div id="app-dashboard" class="flex-1 flex flex-col md:flex-row min-w-0 hidden">
+        
+        <!-- Active Alarm SaaS Toast Banner -->
+        <div id="active-session-banner" class="hidden fixed top-0 inset-x-0 z-50 transition-all duration-500">
+            <div class="bg-gradient-to-r from-rose-600 via-pink-600 to-red-600 text-white px-4 md:px-6 py-3 shadow-2xl flex items-center justify-between border-b border-rose-400/40">
+                <div class="flex items-center space-x-3 space-x-reverse container mx-auto">
+                    <span class="flex h-3 w-3 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+                    </span>
+                    <i class="fa-solid fa-triangle-exclamation text-lg animate-bounce"></i>
+                    <div>
+                        <h4 class="font-black text-xs md:text-base tracking-wide" id="banner-text">🚨 الجلسة نشطة الآن: جارٍ تنبيه المريض للدرج رقم --</h4>
+                        <p class="text-[10px] text-rose-100 font-light hidden sm:block">جهاز ESP32 يطلق التنبيه البصري والصوتي ويرسل الإشعار للتليجرام</p>
+                    </div>
+                </div>
+                <button onclick="dismissBanner()" class="text-white hover:text-rose-200 text-lg px-2 py-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
         </div>
-    </nav>
+
+        <!-- SIDEBAR NAVIGATION FOR DESKTOP ONLY -->
+        <aside class="w-full md:w-72 bg-[#090e1a] border-b md:border-b-0 md:border-l border-slate-800/80 flex-shrink-0 sticky top-0 z-40 md:h-screen md:sticky hidden md:flex flex-col justify-between">
+            <div class="p-5 space-y-6">
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center p-1 glow-purple">
+                            <img src="logo.png" alt="Ehyāa Logo" class="h-6 w-auto object-contain" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2966/2966327.png'"/>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-xl font-black tracking-tight text-white font-jakarta">Ehyāa</h1>
+                                <span class="text-xs px-2 py-0.5 rounded-md bg-brand-500/20 text-brand-300 font-mono font-bold border border-brand-500/30">v3.5 Auth</span>
+                            </div>
+                            <p class="text-[10px] text-slate-400 font-semibold">منصة الموزع الطبي الذكي</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span id="esp-status-led" class="w-3 h-3 rounded-full bg-emerald-500 pulse-live-emerald"></span>
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold block">Firebase RTDB</span>
+                            <span id="esp-status-text" class="text-xs font-black text-emerald-400 font-mono">CONNECTED (LIVE)</span>
+                        </div>
+                    </div>
+                    <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono">Synced</span>
+                </div>
+
+                <nav class="space-y-1">
+                    <button onclick="switchSaaSTab('drawers')" id="side-btn-drawers" class="sidebar-link active w-full px-4 py-3 rounded-xl text-xs text-right transition-all flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-cubes text-base text-brand-400"></i>
+                            <span>أدراج الدواء الخمسة</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-md bg-brand-500/20 text-brand-300 text-[10px] font-bold">5</span>
+                    </button>
+
+                    <button onclick="switchSaaSTab('timeline')" id="side-btn-timeline" class="sidebar-link w-full px-4 py-3 rounded-xl text-xs text-right transition-all flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-clock-rotate-left text-base text-slate-400"></i>
+                            <span>الجدول الزمني المجدول</span>
+                        </div>
+                        <span id="timeline-count-badge" class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[10px] font-bold">--</span>
+                    </button>
+
+                    <button onclick="switchSaaSTab('ai')" id="side-btn-ai" class="sidebar-link w-full px-4 py-3 rounded-xl text-xs text-right transition-all flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-brain text-base text-slate-400"></i>
+                            <span>تحليلات الذكاء الاصطناعي</span>
+                        </div>
+                        <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[9px] font-bold">85%</span>
+                    </button>
+
+                    <button onclick="switchSaaSTab('logs')" id="side-btn-logs" class="sidebar-link w-full px-4 py-3 rounded-xl text-xs text-right transition-all flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-terminal text-base text-slate-400"></i>
+                            <span>سجلات الـ ESP32 الحية</span>
+                        </div>
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    </button>
+                </nav>
+
+            </div>
+
+            <div class="p-5 border-t border-slate-800/80 space-y-4 bg-[#070b14]">
+                <div class="flex items-center justify-between text-xs font-mono bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-regular fa-clock text-brand-400"></i>
+                        <span id="local-clock" class="font-bold text-slate-200">00:00:00</span>
+                    </div>
+                    <span id="utc-clock" class="text-[10px] text-slate-500">UTC</span>
+                </div>
+
+                <div class="flex items-center justify-between pt-1">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center font-bold text-xs border border-slate-700">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="text-right overflow-hidden">
+                            <div id="desktop-user-email" class="text-xs font-bold text-slate-200 truncate">user@ehyaa.med</div>
+                            <span id="desktop-user-role" class="text-[10px] text-brand-400 font-semibold px-1.5 py-0.5 bg-brand-500/10 rounded">Role</span>
+                        </div>
+                    </div>
+                    <button onclick="handleLogout()" class="text-rose-400 hover:text-rose-300 text-sm p-2 transition bg-rose-500/10 rounded-lg" title="تسجيل الخروج">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- MAIN SAAS WORKSPACE CONTENT -->
+        <div class="flex-1 flex flex-col min-w-0 bg-[#050810] pb-safe-bottom">
+            
+            <!-- Desktop Desktop Top Bar -->
+            <header class="hidden md:flex bg-[#090e1a]/90 border-b border-slate-800/80 px-8 py-4 items-center justify-between backdrop-blur-md sticky top-0 z-30">
+                <div>
+                    <h2 class="text-lg font-black text-white font-jakarta">Ehyāa Realtime Control Center</h2>
+                    <p class="text-xs text-slate-400">مربوط فورياً مع Firebase Database: <span class="font-mono text-brand-300">ehyaa-35076-default-rtdb</span></p>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <span id="session-status-summary" class="px-3.5 py-1.5 rounded-xl bg-slate-900 text-slate-300 text-xs font-bold border border-slate-800 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                        جاهز للمراقبة
+                    </span>
+                    <div class="px-3.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-fire text-amber-500"></i>
+                        Firebase Sync Active
+                    </div>
+                </div>
+            </header>
+
+            <main class="p-3 md:p-8 max-w-7xl w-full mx-auto space-y-3 md:space-y-8">
+
+                <!-- MOBILE NATIVE MINIMAL BRAND & STATUS HEADER BAR -->
+                <div class="md:hidden flex items-center justify-between pt-2 pb-1 px-1">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center p-1 glow-purple">
+                            <img src="logo.png" alt="Ehyāa Logo" class="h-4 w-auto object-contain" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2966/2966327.png'"/>
+                        </div>
+                        <div>
+                            <h1 class="text-sm font-black text-white font-jakarta leading-none">Ehyāa <span class="text-brand-400 text-[10px]">Cloud</span></h1>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="handleLogout()" class="text-rose-400 bg-rose-500/10 px-2 py-1 rounded-lg text-xs font-bold border border-rose-500/20">
+                            خروج <i class="fa-solid fa-arrow-right-from-bracket ml-0.5"></i>
+                        </button>
+                        <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1 bg-slate-900/90 px-2 py-0.5 rounded-lg border border-slate-800 text-[10px]">
+                                <span id="mobile-esp-led" class="w-2 h-2 rounded-full bg-emerald-500 pulse-live-emerald"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPACT MOBILE & DESKTOP QUICK STATS -->
+                <section class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-5">
+                    <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] md:text-xs text-slate-400 font-bold block">الأدراج النشطة</span>
+                                <h3 class="text-sm md:text-2xl font-black text-white font-jakarta">5 Drawers</h3>
+                            </div>
+                            <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-brand-500/10 text-brand-400 flex items-center justify-center text-xs md:text-xl">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] md:text-xs text-slate-400 font-bold block">التزام المريض</span>
+                                <h3 class="text-sm md:text-2xl font-black text-emerald-400 font-jakarta">85%</h3>
+                            </div>
+                            <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs md:text-xl">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] md:text-xs text-slate-400 font-bold block">المخاطر التنبؤية</span>
+                                <h3 class="text-sm md:text-2xl font-black text-amber-400 font-jakarta">Low Risk</h3>
+                            </div>
+                            <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs md:text-xl">
+                                <i class="fa-solid fa-shield-heart"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card-mobile p-3 md:p-5 rounded-2xl relative overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] md:text-xs text-slate-400 font-bold block">تنبيهات التليجرام</span>
+                                <h3 class="text-sm md:text-2xl font-black text-indigo-400 font-jakarta">4 Chats</h3>
+                            </div>
+                            <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xs md:text-xl">
+                                <i class="fa-brands fa-telegram"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- TAB VIEW 1: 5 SMART DRAWERS CARDS -->
+                <section id="view-drawers" class="space-y-3 md:space-y-6">
+                    
+                    <!-- Drawer Section Selector Header -->
+                    <div class="glass-card-mobile p-3 md:p-5 rounded-2xl md:rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs md:text-lg font-black text-white flex items-center gap-2">
+                                <i class="fa-solid fa-boxes-stacked text-brand-400"></i>
+                                إدارة الأدراج والمواعيد
+                            </h3>
+                            <span class="md:hidden text-[10px] text-slate-400 font-bold">اختر الدرج ➔</span>
+                        </div>
+
+                        <!-- Mobile Native Segmented Drawer Filter Tabs -->
+                        <div class="flex items-center gap-1 overflow-x-auto pb-0.5 md:pb-0 w-full md:w-auto">
+                            <button onclick="selectDrawerFilter('all')" id="drawer-flt-all" class="flex-1 md:flex-none px-3 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-brand-600 text-white shadow-md text-center">الكل (5)</button>
+                            <button onclick="selectDrawerFilter(1)" id="drawer-flt-1" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #1</button>
+                            <button onclick="selectDrawerFilter(2)" id="drawer-flt-2" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #2</button>
+                            <button onclick="selectDrawerFilter(3)" id="drawer-flt-3" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #3</button>
+                            <button onclick="selectDrawerFilter(4)" id="drawer-flt-4" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #4</button>
+                            <button onclick="selectDrawerFilter(5)" id="drawer-flt-5" class="flex-1 md:flex-none px-2.5 py-1.5 rounded-xl text-[11px] md:text-xs font-bold bg-slate-800/90 text-slate-300 hover:bg-slate-700 whitespace-nowrap border border-slate-700/80 text-center">درج #5</button>
+                        </div>
+                    </div>
+
+                    <!-- 5 Drawers Grid -->
+                    <div id="drawers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-6">
+                        <!-- Dynamic Drawer Cards -->
+                    </div>
+                </section>
+
+
+                <!-- TAB VIEW 2: DAILY SCHEDULE TIMELINE -->
+                <section id="view-timeline" class="hidden space-y-3 md:space-y-6">
+                    <div class="glass-card-mobile p-4 md:p-6 rounded-2xl md:rounded-3xl space-y-3 md:space-y-6">
+                        <div class="flex items-center justify-between pb-2.5 md:pb-4 border-b border-slate-800">
+                            <div>
+                                <h3 class="text-xs md:text-lg font-black text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-calendar-check text-brand-400"></i>
+                                    جدول المواعيد اليومية (Daily Timeline)
+                                </h3>
+                                <p class="text-[10px] md:text-xs text-slate-400 mt-0.5">ترتيب زمني متسلسل لجميع مواعيد جرعات اليوم المقررة</p>
+                            </div>
+                        </div>
+
+                        <div id="timeline-container" class="space-y-2.5">
+                            <!-- Mobile Timeline List -->
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- TAB VIEW 3: AI ANALYTICS & INSIGHTS -->
+                <section id="view-ai" class="hidden space-y-3 md:space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6">
+                        
+                        <!-- AI Module (2 Columns) -->
+                        <div class="lg:col-span-2 glass-card-mobile p-4 md:p-6 rounded-2xl md:rounded-3xl space-y-4 md:space-y-6">
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                                <div class="flex items-center space-x-2.5 space-x-reverse">
+                                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center text-sm md:text-lg">
+                                        <i class="fa-solid fa-brain"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xs md:text-base font-black text-white">🤖 تحليلات الذكاء الاصطناعي (AI Insights)</h3>
+                                        <p class="text-[10px] md:text-xs text-slate-400">تحليل التزام المرضى والتوقعات التنبؤية</p>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-0.5 text-[9px] md:text-xs font-bold rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">v3.0 Ultra</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div class="p-3 md:p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+                                    <div class="flex justify-between items-center mb-1.5">
+                                        <span class="text-[11px] font-bold text-slate-300">معدل الالتزام الكلي</span>
+                                        <span class="text-xs font-black text-emerald-400 font-mono">85%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                                        <div class="bg-gradient-to-r from-brand-500 to-emerald-400 h-2 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 mt-1.5">يعتمد بناءً على فتح الأدراج واستجابة البازر خلال الـ 30 يوماً الماضية.</p>
+                                </div>
+
+                                <div class="p-3 md:p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-[11px] font-bold text-slate-300">مستوى مخاطر تفويت الجرعة</span>
+                                        <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Medium Risk</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1.5">
+                                        <div class="flex-1 h-1.5 bg-emerald-500 rounded-full opacity-30"></div>
+                                        <div class="flex-1 h-1.5 bg-amber-500 rounded-full"></div>
+                                        <div class="flex-1 h-1.5 bg-rose-500 rounded-full opacity-30"></div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 mt-1.5">مؤشر تنبؤي منخفض الخطورة خلال الساعات الـ 48 القادمة.</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2 pt-1">
+                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">التوقعات والتوصيات الذكية:</h4>
+                                
+                                <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2">
+                                    <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5 text-xs"></i>
+                                    <div>
+                                        <p class="text-[11px] text-slate-200 font-bold">الجرعات المسائية هي الأكثر عرضة للنسيان بنسبة 45%.</p>
+                                        <p class="text-[10px] text-slate-400">تم ملاحظة تأخر المريض في الاستجابة للتنبيه على الدرج رقم 4 في عطلة نهاية الأسبوع.</p>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-start gap-2">
+                                    <i class="fa-solid fa-chart-line text-brand-400 mt-0.5 text-xs"></i>
+                                    <div>
+                                        <p class="text-[11px] text-slate-200 font-bold">توقعات الذكاء الاصطناعي: احتمال مرتفع لتفويت جرعة يوم الجمعة القادم.</p>
+                                        <p class="text-[10px] text-slate-400">بسبب التغير المعتاد في نمط أنشطة المريض يوم الجمعة مساءً.</p>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start gap-2">
+                                    <i class="fa-solid fa-lightbulb text-brand-400 mt-0.5 text-xs"></i>
+                                    <div>
+                                        <p class="text-[11px] text-slate-200 font-bold">توصية الذكاء الاصطناعي: تعديل موعد الجرعة إلى 8:30 مساءً بدلاً من 9:00.</p>
+                                        <p class="text-[10px] text-slate-400">لتحسين التوافق مع نمط نوم المريض ورفع نسبة الالتزام إلى 95%.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chart (1 Column) -->
+                        <div class="glass-card-mobile p-4 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xs md:text-base font-bold text-white mb-1 flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-pie text-brand-400"></i>
+                                    توزيع الالتزام بالجرعات
+                                </h3>
+                                <p class="text-[10px] text-slate-400 mb-2">إحصائيات الأدراج الخمسة للجهاز</p>
+                                
+                                <div class="relative w-full h-48 md:h-64 flex items-center justify-center">
+                                    <canvas id="adherenceChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 pt-2 border-t border-slate-800 flex justify-between text-[10px] text-slate-300">
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> مكتملة (85%)</span>
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span> متأخرة (10%)</span>
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500 inline-block"></span> فائتة (5%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- TAB VIEW 4: HARDWARE LOGS -->
+                <section id="view-logs" class="hidden space-y-3 md:space-y-6">
+                    <div class="glass-card-mobile p-3.5 md:p-6 rounded-2xl md:rounded-3xl space-y-3 md:space-y-6">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-2.5 border-b border-slate-800">
+                            <div>
+                                <h3 class="text-xs md:text-lg font-black text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-terminal text-brand-400"></i>
+                                    سجل أحداث الـ ESP32 المباشر (Real-Time Logs)
+                                </h3>
+                                <p class="text-[10px] text-slate-400 mt-0.5">مزامنة فورية عند تشغيل البازر، الـ LED، أو فتح الدرج عبر الفايربيس</p>
+                            </div>
+                            <button onclick="clearLogsLocalView()" class="px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] transition border border-slate-700 font-bold self-start md:self-auto">
+                                <i class="fa-solid fa-eraser ml-1"></i> مسح السجل المحلي
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-right text-[11px] md:text-sm text-slate-300">
+                                <thead class="text-[9px] md:text-xs uppercase bg-slate-900/80 text-slate-400 border-b border-slate-800">
+                                    <tr>
+                                        <th scope="col" class="py-2.5 px-2 font-bold">التوقيت</th>
+                                        <th scope="col" class="py-2.5 px-2 font-bold">معرف الدرج</th>
+                                        <th scope="col" class="py-2.5 px-2 font-bold">الإجراء</th>
+                                        <th scope="col" class="py-2.5 px-2 font-bold">الحالة</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logs-table-body" class="divide-y divide-slate-800/60">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <!-- NATIVE FLOATING BOTTOM APP BAR FOR MOBILE -->
+        <nav class="md:hidden fixed bottom-3 inset-x-3 bg-[#0d1424]/95 backdrop-blur-xl border border-slate-700/60 z-50 rounded-2xl px-2 py-1.5 shadow-2xl glow-purple">
+            <div class="grid grid-cols-4 gap-1 text-center">
+                
+                <button onclick="switchSaaSTab('drawers')" id="mob-btn-drawers" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-brand-300 bg-brand-500/20 font-bold">
+                    <i class="fa-solid fa-cubes text-base mb-0.5"></i>
+                    <span class="text-[10px]">الأدراج</span>
+                </button>
+
+                <button onclick="switchSaaSTab('timeline')" id="mob-btn-timeline" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 font-bold">
+                    <i class="fa-solid fa-clock-rotate-left text-base mb-0.5"></i>
+                    <span class="text-[10px]">المواعيد</span>
+                </button>
+
+                <button onclick="switchSaaSTab('ai')" id="mob-btn-ai" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 font-bold">
+                    <i class="fa-solid fa-brain text-base mb-0.5"></i>
+                    <span class="text-[10px]">الذكاء</span>
+                </button>
+
+                <button onclick="switchSaaSTab('logs')" id="mob-btn-logs" class="flex flex-col items-center justify-center py-1.5 rounded-xl transition-all text-slate-400 font-bold">
+                    <i class="fa-solid fa-terminal text-base mb-0.5"></i>
+                    <span class="text-[10px]">السجل</span>
+                </button>
+
+            </div>
+        </nav>
+    </div> <!-- END APP DASHBOARD -->
 
 
     <!-- JAVASCRIPT & REALTIME FIREBASE LOGIC -->
@@ -556,6 +628,79 @@
         let currentActiveDrawerNum = null;
         let eventLogsList = [];
         let activeFilter = 'all';
+
+        // --- AUTHENTICATION & RBAC LOGIC ---
+        let currentUserRole = null; // 'doctor' | 'caregiver' | 'patient'
+
+        function checkSession() {
+            const savedSession = localStorage.getItem('ehyaa_user_session');
+            if (savedSession) {
+                const session = JSON.parse(savedSession);
+                showDashboard(session.role, session.email);
+            } else {
+                document.getElementById('app-login').classList.remove('hidden');
+                document.getElementById('app-dashboard').classList.add('hidden');
+            }
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (password !== '123456') {
+                alert('كلمة المرور غير صحيحة. (استخدم 123456 للتجربة)');
+                return;
+            }
+
+            let role = '';
+            if (email === 'doctor@ehyaa.med') role = 'doctor';
+            else if (email === 'caregiver@ehyaa.med') role = 'caregiver';
+            else if (email === 'patient@ehyaa.med') role = 'patient';
+            else {
+                alert('البريد الإلكتروني غير مسجل.');
+                return;
+            }
+
+            const session = { email, role };
+            localStorage.setItem('ehyaa_user_session', JSON.stringify(session));
+            
+            showDashboard(role, email);
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('ehyaa_user_session');
+            window.location.reload();
+        }
+
+        function showDashboard(role, email) {
+            currentUserRole = role;
+            
+            document.getElementById('app-login').classList.add('hidden');
+            document.getElementById('app-dashboard').classList.remove('hidden');
+
+            // Update UI based on user info
+            document.getElementById('desktop-user-email').textContent = email;
+            
+            const roleBadge = document.getElementById('desktop-user-role');
+            if (role === 'doctor') {
+                roleBadge.textContent = 'الطبيب المتابع';
+                roleBadge.className = 'text-[10px] text-amber-400 font-bold px-1.5 py-0.5 bg-amber-500/10 border border-amber-500/20 rounded';
+            } else if (role === 'caregiver') {
+                roleBadge.textContent = 'المرافق / المسؤول';
+                roleBadge.className = 'text-[10px] text-blue-400 font-bold px-1.5 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded';
+            } else {
+                roleBadge.textContent = 'المريض';
+                roleBadge.className = 'text-[10px] text-emerald-400 font-bold px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded';
+            }
+
+            // Initialize App
+            startLiveClock();
+            loadDrawersDataFromFirebase();
+            setupFirebaseListeners();
+            initAdherenceChart();
+        }
+
+        // --- DASHBOARD LOGIC ---
 
         function switchSaaSTab(tabName) {
             const tabs = ['drawers', 'timeline', 'ai', 'logs'];
@@ -599,7 +744,6 @@
                     }
                 }
             });
-
             renderDrawersGrid();
         }
 
@@ -608,6 +752,10 @@
             if (!container) return;
             container.innerHTML = '';
 
+            const isPatient = currentUserRole === 'patient';
+            const isCaregiver = currentUserRole === 'caregiver';
+            const isReadOnlyFields = isPatient || isCaregiver; // Only doctor can edit fields
+            
             for (let id = 1; id <= 5; id++) {
                 if (activeFilter !== 'all' && activeFilter !== id) continue;
 
@@ -629,11 +777,11 @@
                     <div class="flex items-center gap-1 bg-brand-500/10 border border-brand-500/20 px-2 py-0.5 rounded-lg text-[9px] md:text-[11px] font-bold text-brand-300 font-mono">
                         <i class="fa-regular fa-clock text-[8px]"></i>
                         <span>${t}</span>
-                        <button onclick="removeTimeSlot(${id}, ${idx})" class="text-rose-400 hover:text-rose-300 mr-1 text-[8px]">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
+                        ${!isReadOnlyFields ? `<button onclick="removeTimeSlot(${id}, ${idx})" class="text-rose-400 hover:text-rose-300 mr-1 text-[8px]"><i class="fa-solid fa-xmark"></i></button>` : ''}
                     </div>
                 `).join('');
+
+                const inputClass = `w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 font-semibold focus:outline-none focus:border-brand-500 ${isReadOnlyFields ? 'opacity-70 cursor-not-allowed' : ''}`;
 
                 card.innerHTML = `
                     <div>
@@ -646,60 +794,58 @@
 
                         <div class="space-y-2 mb-3">
                             <div>
-                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-capsules text-brand-400 ml-1"></i>اسم العلاج (Medication Name):</label>
-                                <input type="text" id="input-name-${id}" value="${drawer.name || ''}" 
-                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-semibold">
+                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-capsules text-brand-400 ml-1"></i>اسم العلاج:</label>
+                                <input type="text" id="input-name-${id}" value="${drawer.name || ''}" class="${inputClass}" ${isReadOnlyFields ? 'readonly' : ''}>
                             </div>
 
                             <div>
-                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-stethoscope text-brand-400 ml-1"></i>دواعي الاستعمال (Purpose):</label>
-                                <input type="text" id="input-purpose-${id}" value="${drawer.purpose || ''}" placeholder="مثال: مسكن صداع، ضغط..." 
-                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-semibold">
+                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-stethoscope text-brand-400 ml-1"></i>دواعي الاستعمال:</label>
+                                <input type="text" id="input-purpose-${id}" value="${drawer.purpose || ''}" class="${inputClass}" ${isReadOnlyFields ? 'readonly' : ''}>
                             </div>
 
                             <div>
-                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-vial text-brand-400 ml-1"></i>الكمية / الجرعة (Quantity):</label>
-                                <input type="text" id="input-quantity-${id}" value="${drawer.quantity || ''}" placeholder="مثال: 1 قرص، نصف ملعقة..." 
-                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-semibold">
+                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-0.5"><i class="fa-solid fa-vial text-brand-400 ml-1"></i>الكمية / الجرعة:</label>
+                                <input type="text" id="input-quantity-${id}" value="${drawer.quantity || ''}" class="${inputClass}" ${isReadOnlyFields ? 'readonly' : ''}>
                             </div>
 
                             <div>
-                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-1"><i class="fa-solid fa-clock text-brand-400 ml-1"></i>مواعيد الجرعات اليومية:</label>
+                                <label class="text-[9px] md:text-[10px] text-slate-400 font-bold block mb-1"><i class="fa-solid fa-clock text-brand-400 ml-1"></i>مواعيد الجرعات:</label>
                                 <div class="flex flex-wrap gap-1 mb-1.5">
                                     ${scheduleSlotsHTML}
                                 </div>
+                                ${!isReadOnlyFields ? `
                                 <div class="flex gap-1">
-                                    <input type="text" id="input-add-time-${id}" placeholder="08:00 AM" 
-                                        class="flex-1 bg-slate-900/90 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-mono">
-                                    <button onclick="addTimeSlot(${id})" 
-                                        class="px-2.5 py-1 rounded-xl bg-brand-500/20 hover:bg-brand-500/30 text-brand-300 font-bold text-xs border border-brand-500/30 transition">
+                                    <input type="text" id="input-add-time-${id}" placeholder="08:00 AM" class="flex-1 bg-slate-900/90 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-slate-100 focus:outline-none focus:border-brand-500 font-mono">
+                                    <button onclick="addTimeSlot(${id})" class="px-2.5 py-1 rounded-xl bg-brand-500/20 hover:bg-brand-500/30 text-brand-300 font-bold text-xs border border-brand-500/30 transition">
                                         <i class="fa-solid fa-plus ml-1"></i>موعد
                                     </button>
                                 </div>
+                                ` : ''}
                             </div>
 
                             <div>
                                 <label class="text-[9px] md:text-[10px] text-brand-300 font-bold block mb-0.5">
                                     <i class="fa-brands fa-telegram text-brand-400 ml-1"></i> نص رسالة التليجرام:
                                 </label>
-                                <textarea id="input-telegram-${id}" rows="2" 
-                                    class="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-2 text-[10px] md:text-[11px] text-slate-200 focus:outline-none focus:border-brand-500 resize-none font-semibold leading-relaxed">${drawer.custom_message || ''}</textarea>
+                                <textarea id="input-telegram-${id}" rows="2" class="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-2 text-[10px] md:text-[11px] text-slate-200 focus:outline-none focus:border-brand-500 resize-none font-semibold leading-relaxed ${isReadOnlyFields ? 'opacity-70 cursor-not-allowed' : ''}" ${isReadOnlyFields ? 'readonly' : ''}>${drawer.custom_message || ''}</textarea>
                             </div>
                         </div>
                     </div>
 
                     <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
-                        <button onclick="saveDrawerConfig(${id})" 
-                            class="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer">
+                        ${!isReadOnlyFields ? `
+                        <button onclick="saveDrawerConfig(${id})" class="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer">
                             <i class="fa-solid fa-floppy-disk"></i>
-                            <span>حفظ الإعدادات في Firebase</span>
+                            <span>حفظ التعديلات</span>
                         </button>
+                        ` : ''}
 
-                        <button onclick="triggerDrawerAlarm(${id})" 
-                            class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-800 hover:from-brand-500 hover:to-brand-700 text-white font-bold text-xs shadow-lg shadow-brand-600/30 transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer">
+                        ${!isPatient ? `
+                        <button onclick="triggerDrawerAlarm(${id})" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-800 hover:from-brand-500 hover:to-brand-700 text-white font-bold text-xs shadow-lg shadow-brand-600/30 transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer">
                             <i class="fa-solid fa-bell"></i>
-                            <span>إطلاق التنبيه (Trigger Alarm)</span>
+                            <span>إطلاق التنبيه الفوري</span>
                         </button>
+                        ` : ''}
                     </div>
                 `;
 
@@ -747,10 +893,12 @@
                         </div>
                     </div>
 
+                    ${currentUserRole !== 'patient' ? `
                     <button onclick="triggerDrawerAlarm(${item.drawerId})" class="self-end sm:self-auto px-3 py-1 rounded-xl bg-brand-500/20 hover:bg-brand-600 hover:text-white text-brand-300 text-xs font-bold transition border border-brand-500/30 flex items-center gap-1.5">
                         <i class="fa-solid fa-bell"></i>
-                        <span>تنبيه الدرج</span>
+                        <span>تنبيه</span>
                     </button>
+                    ` : ''}
                 `;
 
                 container.appendChild(row);
@@ -758,6 +906,7 @@
         }
 
         function addTimeSlot(drawerNum) {
+            if (currentUserRole !== 'doctor') return;
             const timeInput = document.getElementById(`input-add-time-${drawerNum}`);
             const val = timeInput.value.trim();
             if (val) {
@@ -769,12 +918,15 @@
         }
 
         function removeTimeSlot(drawerNum, index) {
+            if (currentUserRole !== 'doctor') return;
             drawersData[drawerNum].schedules.splice(index, 1);
             renderDrawersGrid();
             renderTimelineSchedule();
         }
 
         function saveDrawerConfig(drawerNum) {
+            if (currentUserRole !== 'doctor') return;
+            
             const nameVal = document.getElementById(`input-name-${drawerNum}`).value.trim();
             const purposeVal = document.getElementById(`input-purpose-${drawerNum}`).value.trim();
             const quantityVal = document.getElementById(`input-quantity-${drawerNum}`).value.trim();
@@ -794,23 +946,25 @@
                 addLogEntry(
                     new Date().toLocaleTimeString('ar-EG'),
                     `درج رقم ${drawerNum}`,
-                    `مزامنة الفايربيس: حفظ بيانات العلاج والمواعيد (${schedules.length} مواعيد)`,
+                    `حفظ بيانات العلاج (${schedules.length} مواعيد)`,
                     "Firebase Saved"
                 );
-                alert(`🔥 [Firebase Realtime Database]\nتم حفظ ومزامنة تفاصيل العلاج والمواعيد للدرج رقم ${drawerNum} في الفايربيس بنجاح.`);
+                alert(`🔥 تم حفظ تفاصيل الدرج رقم ${drawerNum} بنجاح.`);
             }).catch(err => {
                 console.error("Firebase save error:", err);
-                alert("تعذر الحفظ في الفايربيس: " + err.message);
+                alert("تعذر الحفظ: " + err.message);
             });
         }
 
         function triggerDrawerAlarm(drawerNum) {
+            if (currentUserRole === 'patient') return;
+
             const drawerTriggerRef = database.ref(`drawers/drawer_${drawerNum}/trigger`);
             drawerTriggerRef.set(true).then(() => {
                 addLogEntry(
                     new Date().toLocaleTimeString('ar-EG'),
                     `درج رقم ${drawerNum}`,
-                    "Firebase Realtime: إرسال أمر التنبيه (trigger = true)",
+                    "إرسال أمر التنبيه اليدوي",
                     "ESP32 Signal Active"
                 );
             }).catch(err => {
@@ -886,7 +1040,7 @@
                     summaryText.className = "px-3.5 py-1.5 rounded-xl bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold animate-pulse flex items-center gap-2";
                 }
 
-                if (bannerText) bannerText.textContent = `🚨 الجلسة نشطة الآن: جهاز ESP32 يطلق التنبيه للدرج رقم ${currentActiveDrawerNum || 1}`;
+                if (bannerText) bannerText.textContent = `🚨 الجلسة نشطة الآن: يرجى التوجه لسحب الدواء من الدرج رقم ${currentActiveDrawerNum || 1}`;
                 if (banner) banner.classList.remove('hidden');
 
                 if (currentActiveDrawerNum) {
@@ -896,13 +1050,13 @@
                 addLogEntry(
                     new Date().toLocaleTimeString('ar-EG'),
                     `درج رقم ${currentActiveDrawerNum || 1}`,
-                    "ESP32 (Firebase): بدء الجلسة وتشغيل LED والبازر",
+                    "بدء جلسة التنبيه",
                     "Session Started"
                 );
 
             } else if (status === "Dose Completed") {
                 if (summaryText) {
-                    summaryText.textContent = "تم إتمام أخذ الجرعة (Dose Completed)";
+                    summaryText.textContent = "تم إتمام أخذ الجرعة";
                     summaryText.className = "px-3.5 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-2";
                 }
                 if (banner) banner.classList.add('hidden');
@@ -914,7 +1068,7 @@
                 addLogEntry(
                     new Date().toLocaleTimeString('ar-EG'),
                     `درج رقم ${currentActiveDrawerNum || 1}`,
-                    "ESP32 (Firebase): إيقاف التنبيه واكتمال الجرعة",
+                    "إيقاف التنبيه واكتمال الجرعة",
                     "✅ مكتملة (Completed)"
                 );
 
@@ -982,7 +1136,7 @@
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="4" class="py-6 text-center text-slate-500 text-xs font-semibold">
-                            لا توجد سجلات أحداث حالية. يتم مزامنة السجلات فورياً مع الـ ESP32 عبر Firebase.
+                            لا توجد سجلات.
                         </td>
                     </tr>
                 `;
@@ -1044,7 +1198,7 @@
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['مكتملة (Completed)', 'متأخرة (Delayed)', 'فائتة (Missed)'],
+                    labels: ['مكتملة', 'متأخرة', 'فائتة'],
                     datasets: [{
                         data: [85, 10, 5],
                         backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
@@ -1062,14 +1216,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            startLiveClock();
-            renderDrawersGrid();
-            loadDrawersDataFromFirebase();
-            setupFirebaseListeners();
-            initAdherenceChart();
-
-            addLogEntry("08:02:14 AM", "درج رقم 1", "ESP32: تأكيد فتح الدرج وأخذ الجرعة", "✅ مكتملة (Completed)");
-            addLogEntry("08:00:00 AM", "درج رقم 1", "ESP32: إطلاق التنبيه البصري والصوتي + تليجرام", "Session Started");
+            // Check auth session before doing anything else
+            checkSession();
         });
     </script>
 </body>
